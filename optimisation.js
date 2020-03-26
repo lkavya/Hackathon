@@ -70,8 +70,10 @@
         }
       } else {
         // Optimised code here
-        var offSetTop=parseInt(m.style.top) ,
-        offSetLeft=parseInt(m.style.left) ;
+        //offSetTop= top+margin.
+        //so replace to reduce layout thrashing
+        var offSetTop=parseInt(m.style.top) ;
+        var offSetLeft=parseInt(m.style.left) ;
         var top = m.classList.contains('down') ? offSetTop + distance : offSetTop - distance;
         var left = m.classList.contains('right') ? parseInt(offSetLeft) + distance : parseInt(offSetLeft) - distance;
         if (top < 0) top = 0;
@@ -80,6 +82,7 @@
         if (left < 0) left = 0;
         if (left > maxWidth) left = maxWidth;
         m.style.left = left + 'px';
+        //variable top already has calculated offsettop .so replace 
         if (top === 0) {
           m.classList.remove('up');
           m.classList.add('down');
@@ -88,6 +91,7 @@
           m.classList.remove('down');
           m.classList.add('up');
         }
+        //variable left already has calculated offsetleft .so replace 
         if (left === 0) {
           m.classList.remove('left');
           m.classList.add('right');

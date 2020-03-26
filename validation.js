@@ -7,18 +7,25 @@ var MyInput = class extends HTMLElement {
   constructor() {
     super();
 
-    const template1 = document.getElementById('my-input');
-    const templateContent = template1.content;
-    var mi = document.createElement("input");
-    mi.type= "text";
-    mi.value = "default";
-    template1.appendChild(mi);
-    const template2 = document.getElementById('my-input');
-    const template2Content = template2.content;
-  
+    const template = document.getElementById('my-input');
+    const templateContent = template.content;
+   //query through dom 
+    var inputDiv=templateContent.querySelectorAll("DIV");
+    var labels=inputDiv[1].querySelectorAll('label');
+    //clone  label element and replace text with password
+    var labelPasscln=labels[0].cloneNode(true);
+    labelPasscln.innerHtml='password';
+    inputDiv[1].appendChild(labelPasscln);
+
+    //clone input box with all labels and remove not needed 
+      for(var index=0;index<inputDiv.length;index++){
+        let divClone=inputDiv[index].cloneNode(true);
+        templateContent.appendChild(divClone);
+      }
     this.el = this.attachShadow({mode: 'open'});
+    
     this.el.appendChild(templateContent.cloneNode(true));
-   // this.el.appendChild(template2Content.cloneNode(true));
+  
     this.inputEl = this.el.querySelector('#input');
   }
 
@@ -35,6 +42,7 @@ var MyInput = class extends HTMLElement {
         this.inputEl.setCustomValidity('Only letters');
       }
       else{
+        //error check for password 
         this.inputEl.setCustomValidity('invalid');
 
 
@@ -53,6 +61,7 @@ var MyInput = class extends HTMLElement {
       if (/[^a-zA-Z]/.test(this.inputEl.value)) return false;
     }
     else{
+      //Password matching
       let re='^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,10}$';
       if(!(re.match(this.inputEl.value))) {
       return false;
